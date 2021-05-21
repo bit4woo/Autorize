@@ -30,7 +30,7 @@ class Initiator():
         self._extender.intercept = 0
         self._extender.lastCookies = ""
         self._extender.currentRequestNumber = 1
-        self._extender.expanded_requests = 0
+        self._extender.expanded_requests = 1 #1=展开，只显示1个；2=收缩，全显示
     
     def draw_all(self):
         interception_filters = InterceptionFilters(self._extender)

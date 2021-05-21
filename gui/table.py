@@ -15,7 +15,8 @@ from java.lang import Integer
 from java.lang import String
 from java.awt import Color
 
-from helpers.filters import expand, collapse
+from helpers.filters import changeDisplay
+
 
 class TableFilter():
     def __init__(self, extender):
@@ -229,21 +230,20 @@ class Table(JTable):
         self._extender._currentlyDisplayedItem = logEntry
 
         if col == 3:
-            collapse(self._extender, self._extender.modified_requests_tabs)
-            collapse(self._extender, self._extender.unauthenticated_requests_tabs)
-            expand(self._extender, self._extender.original_requests_tabs)
+            changeDisplay(self._extender, self._extender.original_requests_tabs)
+            # collapse(self._extender, self._extender.modified_requests_tabs)
+            # collapse(self._extender, self._extender.unauthenticated_requests_tabs)
+            # expand(self._extender, self._extender.original_requests_tabs)
         elif col == 4 or col == 6:
-            collapse(self._extender, self._extender.original_requests_tabs)
-            collapse(self._extender, self._extender.unauthenticated_requests_tabs)
-            expand(self._extender, self._extender.modified_requests_tabs)
+            # collapse(self._extender, self._extender.original_requests_tabs)
+            # collapse(self._extender, self._extender.unauthenticated_requests_tabs)
+            # expand(self._extender, self._extender.modified_requests_tabs)
+            changeDisplay(self._extender, self._extender.modified_requests_tabs)
         elif col == 5 or col == 7:
-            collapse(self._extender, self._extender.original_requests_tabs)
-            collapse(self._extender, self._extender.modified_requests_tabs)
-            expand(self._extender, self._extender.unauthenticated_requests_tabs)
-        else:
-            collapse(self._extender, self._extender.original_requests_tabs)
-            collapse(self._extender, self._extender.modified_requests_tabs)
-            collapse(self._extender, self._extender.unauthenticated_requests_tabs)
+            # collapse(self._extender, self._extender.original_requests_tabs)
+            # collapse(self._extender, self._extender.modified_requests_tabs)
+            # expand(self._extender, self._extender.unauthenticated_requests_tabs)
+            changeDisplay(self._extender, self._extender.unauthenticated_requests_tabs)
 
         JTable.changeSelection(self, row, col, toggle, extend)
         return

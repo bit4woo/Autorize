@@ -22,7 +22,6 @@ from burp import IMessageEditorController
 from thread import start_new_thread
 
 from table import Table, LogEntry, TableRowFilter
-from helpers.filters import expand, collapse
 
 class ITabImpl(ITab):
     def __init__(self, extender):
@@ -45,8 +44,8 @@ class Tabs():
         self._extender.logTable = Table(self._extender)
 
         tableWidth = self._extender.logTable.getPreferredSize().width        
-        self._extender.logTable.getColumn("ID").setPreferredWidth(Math.round(tableWidth / 50 * 2))
-        self._extender.logTable.getColumn("Method").setPreferredWidth(Math.round(tableWidth / 50 * 3))
+        self._extender.logTable.getColumn("ID").setPreferredWidth(Math.round(tableWidth / 50 * 1))
+        self._extender.logTable.getColumn("Method").setPreferredWidth(Math.round(tableWidth / 50 * 1))
         self._extender.logTable.getColumn("URL").setPreferredWidth(Math.round(tableWidth / 50 * 25))
         self._extender.logTable.getColumn("Orig. Len").setPreferredWidth(Math.round(tableWidth / 50 * 4))
         self._extender.logTable.getColumn("Modif. Len").setPreferredWidth(Math.round(tableWidth / 50 * 4))
@@ -100,39 +99,65 @@ class Tabs():
         self._extender._originalresponseViewer = self._extender._callbacks.createMessageEditor(message_editor, False)
 
         self._extender._unauthorizedrequestViewer = self._extender._callbacks.createMessageEditor(message_editor, False)
-        self._extender._unauthorizedresponseViewer = self._extender._callbacks.createMessageEditor(message_editor, False)        
+        self._extender._unauthorizedresponseViewer = self._extender._callbacks.createMessageEditor(message_editor, False)
 
-        self._extender.original_requests_tabs = JTabbedPane()
-        self._extender.original_requests_tabs.addMouseListener(Mouseclick(self._extender))
-        self._extender.original_requests_tabs.addTab("Original Request", self._extender._originalrequestViewer.getComponent())
-        self._extender.original_requests_tabs.addTab("Original Response", self._extender._originalresponseViewer.getComponent())
-        self._extender.original_requests_tabs.addTab("Expand", None)
-        self._extender.original_requests_tabs.setSelectedIndex(0)
+        self._extender.original_request_tab = JTabbedPane()
+        self._extender.original_request_tab.addTab("Original Request", self._extender._originalrequestViewer.getComponent())
+        self._extender.original_response_tab = JTabbedPane()
+        self._extender.original_response_tab.addTab("Original Response", self._extender._originalresponseViewer.getComponent())
 
-        self._extender.unauthenticated_requests_tabs = JTabbedPane()
-        self._extender.unauthenticated_requests_tabs.addMouseListener(Mouseclick(self._extender))
-        self._extender.unauthenticated_requests_tabs.addTab("Unauthenticated Request", self._extender._unauthorizedrequestViewer.getComponent())
-        self._extender.unauthenticated_requests_tabs.addTab("Unauthenticated Response", self._extender._unauthorizedresponseViewer.getComponent())
-        self._extender.unauthenticated_requests_tabs.addTab("Expand", None)
-        self._extender.unauthenticated_requests_tabs.setSelectedIndex(0)
+        self._extender.original_requests_tabs = JSplitPane()
+        self._extender.original_requests_tabs.setOrientation(JSplitPane.VERTICAL_SPLIT)
+        self._extender.original_requests_tabs.setResizeWeight(0.5)
+        self._extender.original_requests_tabs.setLeftComponent(self._extender.original_request_tab)
+        self._extender.original_requests_tabs.setRightComponent(self._extender.original_response_tab)
+        # self._extender.original_requests_tabs.addMouseListener(Mouseclick(self._extender))
+        # self._extender.original_requests_tabs.addTab("Expand", None)
+        # self._extender.original_requests_tabs.setSelectedIndex(0)
 
-        self._extender.modified_requests_tabs = JTabbedPane()
-        self._extender.modified_requests_tabs.addMouseListener(Mouseclick(self._extender))
-        self._extender.modified_requests_tabs.addTab("Modified Request", self._extender._requestViewer.getComponent())
-        self._extender.modified_requests_tabs.addTab("Modified Response", self._extender._responseViewer.getComponent())
-        self._extender.modified_requests_tabs.addTab("Expand", None)
-        self._extender.modified_requests_tabs.setSelectedIndex(0)
 
-        self._extender.requests_panel = JPanel(GridLayout(3,0))
+        self._extender.unauthenticated_request_tab = JTabbedPane()
+        self._extender.unauthenticated_request_tab.addTab("Unauthenticated Request", self._extender._unauthorizedrequestViewer.getComponent())
+        self._extender.unauthenticated_response_tab = JTabbedPane()
+        self._extender.unauthenticated_response_tab.addTab("Unauthenticated Response", self._extender._unauthorizedresponseViewer.getComponent())
+
+        self._extender.unauthenticated_requests_tabs = JSplitPane()
+        self._extender.unauthenticated_requests_tabs.setOrientation(JSplitPane.VERTICAL_SPLIT)
+        self._extender.unauthenticated_requests_tabs.setResizeWeight(0.5)
+        self._extender.unauthenticated_requests_tabs.setLeftComponent(self._extender.unauthenticated_request_tab)
+        self._extender.unauthenticated_requests_tabs.setRightComponent(self._extender.unauthenticated_response_tab)
+        # self._extender.unauthenticated_requests_tabs.addMouseListener(Mouseclick(self._extender))
+        # self._extender.unauthenticated_requests_tabs.addTab("Expand", None)
+        # self._extender.unauthenticated_requests_tabs.setSelectedIndex(0)
+
+        self._extender.Modified_request_tab = JTabbedPane()
+        self._extender.Modified_request_tab.addTab("Modified Request", self._extender._requestViewer.getComponent())
+        self._extender.Modified_response_tab = JTabbedPane()
+        self._extender.Modified_response_tab.addTab("Modified Response", self._extender._responseViewer.getComponent())
+
+        self._extender.modified_requests_tabs = JSplitPane()
+        self._extender.modified_requests_tabs.setOrientation(JSplitPane.VERTICAL_SPLIT)
+        self._extender.modified_requests_tabs.setResizeWeight(0.5)
+        self._extender.modified_requests_tabs.setLeftComponent(self._extender.Modified_request_tab)
+        self._extender.modified_requests_tabs.setRightComponent(self._extender.Modified_response_tab)
+        # self._extender.modified_requests_tabs.addMouseListener(Mouseclick(self._extender))
+        # self._extender.modified_requests_tabs.addTab("Expand", None)
+        # self._extender.modified_requests_tabs.setSelectedIndex(0)
+
+        self._extender.requests_panel = JPanel(GridLayout(1,0))
         self._extender.requests_panel.add(self._extender.modified_requests_tabs)
-        self._extender.requests_panel.add(self._extender.original_requests_tabs)
-        self._extender.requests_panel.add(self._extender.unauthenticated_requests_tabs)
+        # self._extender.requests_panel.add(self._extender.original_requests_tabs)
+        # self._extender.requests_panel.add(self._extender.unauthenticated_requests_tabs)
 
         self._extender.tabs.addTab("Request/Response Viewers", self._extender.requests_panel)
         
         self._extender.tabs.addTab("Configuration", self._extender.pnl)
         self._extender.tabs.setSelectedIndex(1)
         self._extender._splitpane.setRightComponent(self._extender.tabs)
+
+        # self._extender.tabs.addTab("Expand", None)
+        # self._extender.tabs.addMouseListener(Mouseclick(self._extender))
+        # self._extender.tabs.setSelectedIndex(0)
 
 
 class SendRequestRepeater(ActionListener):
@@ -220,14 +245,14 @@ class MessageEditor(IMessageEditorController):
     def getResponse(self):
         return self._extender._currentlyDisplayedItem.getResponse()
 
-class Mouseclick(MouseAdapter):
-    def __init__(self, extender):
-        self._extender = extender
-
-    def mouseReleased(self, evt):
-        if evt.getComponent().getSelectedIndex() == 2:
-            if self._extender.expanded_requests == 0:
-                expand(self._extender, evt.getComponent())
-            else:
-                collapse(self._extender, evt.getComponent())
+# class Mouseclick(MouseAdapter):
+#     def __init__(self, extender):
+#         self._extender = extender
+#
+#     def mouseReleased(self, evt):
+#         if evt.getComponent().getSelectedIndex() == 2:
+#             if self._extender.expanded_requests == 0:
+#                 expand(self._extender, evt.getComponent())
+#             else:
+#                 collapse(self._extender, evt.getComponent())
         
