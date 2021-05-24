@@ -24,6 +24,7 @@ def modFilterHelper(listObj, typeObj, textObj):
                         textObj.setText(val)
                 listObj.getModel().remove(index)
 def changeDisplay(extender, comp):
+        extender.tabs.setSelectedIndex(0) #切换到数据包页面
         extender.requests_panel.remove(0)
         extender.requests_panel.add(comp)
         # extender.requests_panel.setLayout(GridLayout(1,0))
